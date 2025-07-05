@@ -9,6 +9,7 @@ This file is intended to collect some thoughts and ideas that I have during the 
 
 ## Missing UI states or features
 - [x] Survey form field validation
+- [x] Add optional indicator instead of asterisk
 - [ ] Home page - no state for empty surveys list
 
 ## Possible improvements to base logic
