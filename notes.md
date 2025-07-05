@@ -10,7 +10,7 @@ This file is intended to collect some thoughts and ideas that I have during the 
 - [x] Add an Error summary section on survey form
 - [x] Add loading indicator
 - [x] Success toast with link to new survey
-- [ ] Table view for Homepage
+- [x] Table view for Homepage
 
 ## Missing UI states or features
 - [x] Survey form field validation
@@ -19,13 +19,14 @@ This file is intended to collect some thoughts and ideas that I have during the 
 - [x] Add optional indicator instead of asterisk
 - [ ] Home page - no state for empty surveys list
 - [x] Switch between edit/preview modes
+- [x] search functionality
 
 ## Possible improvements to base logic
 
 - [ ] lib/survey always reads from LS - we could cache this value for read purposes (P2)
+- [x] unify create/edit form as it uses 90% of the same code
 
 
 ## Caveats
 - "Error summary" focus does not work as I'd like in all major browsers
 - Error handling UX could be better (parsing json, not found, etc)
-- search functionality
