@@ -26,7 +26,7 @@ export function QuestionDisplay({ question, value, onChange, error }: QuestionDi
     <Card className={cn("p-6", showError && "border-destructive")}>
       <Label className="text-lg mb-4 block">
         {question.text}
-        {question.required && <span className="text-destructive ml-1">*</span>}
+        {!question.required && <span className="text-muted-foreground font-normal text-sm ml-1">(Optional)</span>}
       </Label>
 
       {question.type === "text" && (
