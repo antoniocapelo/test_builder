@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import Loading from "@/components/ui/loading";
 import { Textarea } from "@/components/ui/textarea";
 import { useFormValidation } from "@/hooks/use-form-validation";
-import { getSurveyById, saveSurvey } from "@/lib/survey";
+import { getSurveyById, saveDraft, saveSurvey } from "@/lib/survey";
 import { Question, Survey, surveySchema } from "@/types/survey";
 import { set } from "date-fns";
 import { useParams, useRouter } from "next/navigation";
@@ -19,7 +19,7 @@ import { useEffect, useState } from "react";
 export default function EditSurvey() {
   const router = useRouter();
   const params = useParams();
-  const [survey, setSurvey] = useState<Survey | undefined>();
+  const [survey, setSurvey] = useState<Survey>();
   const [isLoading, setIsLoading] = useState(true);
   const { errors, validate, resetError } = useFormValidation(surveySchema)
 
@@ -48,6 +48,19 @@ export default function EditSurvey() {
       ...survey,
       questions: [...survey.questions, newQuestion],
     });
+  };
+
+  const previewChanges = () => {
+    const isValid = validate(survey)
+    if (!isValid) {
+      return;
+    }
+
+    saveDraft(survey!);
+
+    router.push(
+      '/survey/preview',
+    );
   };
 
   const updateQuestion = (updatedQuestion: Question) => {
@@ -139,6 +152,9 @@ export default function EditSurvey() {
         <div className="flex gap-4">
           <Button onClick={addQuestion} variant="outline">
             Add Question
+          </Button>
+          <Button onClick={previewChanges} variant="outline">
+            Preview Changes
           </Button>
           <Button onClick={handleSave}>Save Changes</Button>
         </div>

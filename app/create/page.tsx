@@ -52,8 +52,6 @@ export default function CreateSurvey() {
     if (!isValid) {
       return;
     }
-    // For now, just log the survey to console
-    console.log("Preview Survey:", survey);
 
     saveDraft(survey);
 
