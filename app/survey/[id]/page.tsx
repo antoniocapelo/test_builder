@@ -85,9 +85,6 @@ export default function SurveyPreview() {
     }
   };
 
-  console.log('errors', errors?.['8954f9b4-87c3-4013-91b8-13d148ae9e84'])
-  console.log('questions', survey.questions)
-
   return (
     <div className="container mx-auto py-8">
       <div className="max-w-3xl mx-auto">
