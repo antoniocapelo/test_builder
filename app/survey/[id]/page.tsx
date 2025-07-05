@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import z from "zod";
 import { createSurveyValidationSchema } from "@/components/survey/validation";
+import { useZodFormValidation } from "@/hooks/use-zod-form-validation";
 
 
 export default function SurveyPreview() {
@@ -19,21 +20,26 @@ export default function SurveyPreview() {
   const [survey, setSurvey] = useState<Survey | undefined>();
   const [answers, setAnswers] = useState<Record<string, any>>({});
   const router = useRouter();
-  const [errors, setErrors] = useState<z.ZodFormattedError<
-    Record<string, any>
-  > | null>(null);
-
+  const [surveySchema, setSurveySchema] = useState<z.ZodSchema>();
+  const { errors, resetError, validate } = useZodFormValidation(surveySchema)
 
   useEffect(() => {
     if (params.id) {
       const loadedSurvey = getSurveyById(params.id as string);
       setSurvey(loadedSurvey);
+
+      if (loadedSurvey) {
+        const surveySchema = createSurveyValidationSchema(loadedSurvey.questions);
+        setSurveySchema(surveySchema);
+      }
     }
   }, [params.id]);
 
   if (!survey) {
     return <div>Survey not found</div>;
   }
+
+
 
   const handleShare = () => {
     const link = generateShareableLink(survey!.id);
@@ -42,11 +48,9 @@ export default function SurveyPreview() {
   };
 
   const handleSubmit = () => {
-    const surveySchema = createSurveyValidationSchema(survey.questions);
-    const result = surveySchema.safeParse(answers);
+    const isValid = validate(answers);
 
-    if (!result.success) {
-      setErrors(result.error.format());
+    if (!isValid) {
       toast.error("Please answer all required questions correctly.");
       return;
     }
@@ -74,14 +78,7 @@ export default function SurveyPreview() {
   const handleAnswerChange = (questionId: string, value: any) => {
     setAnswers((prev) => ({ ...prev, [questionId]: value }));
     // Clear errors for the field when it's changed for a better UX
-    if (errors?.[questionId]) {
-      setErrors((prevErrors) => {
-        if (!prevErrors) return null;
-        const newErrors = { ...prevErrors };
-        delete (newErrors as any)[questionId];
-        return newErrors;
-      });
-    }
+    resetError(questionId);
   };
 
   return (
