@@ -141,7 +141,7 @@ export default function SurveyPreview() {
           ))}
         </div>
 
-        {errors && <Card className="p-4 mt-6">
+        {Object.keys(errors || {}).length > 0 && <Card className="p-4 mt-6">
           ⚠️ Your survey has errors. Click <button className="text-destructive" onClick={handleErrorClick}>here</button> to go to the first one.
         </Card>}
 
