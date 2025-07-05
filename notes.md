@@ -17,9 +17,10 @@ This file is intended to collect some thoughts and ideas that I have during the 
 - [x] Survey creation field validation
 - [x] Move zod validation to hook
 - [x] Add optional indicator instead of asterisk
-- [ ] Home page - no state for empty surveys list
+- [x] Home page - no state for empty surveys list
 - [x] Switch between edit/preview modes
 - [x] search functionality
+- [ ] Consistent back navigation
 
 ## Possible improvements to base logic
 
