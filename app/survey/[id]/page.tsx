@@ -10,12 +10,19 @@ import { Share2 } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import z from "zod";
+import { createSurveyValidationSchema } from "@/components/survey/validation";
+
 
 export default function SurveyPreview() {
   const params = useParams();
   const [survey, setSurvey] = useState<Survey | undefined>();
   const [answers, setAnswers] = useState<Record<string, any>>({});
   const router = useRouter();
+  const [errors, setErrors] = useState<z.ZodFormattedError<
+    Record<string, any>
+  > | null>(null);
+
 
   useEffect(() => {
     if (params.id) {
@@ -35,15 +42,16 @@ export default function SurveyPreview() {
   };
 
   const handleSubmit = () => {
-    // Validate required questions
-    const unansweredRequired = survey.questions
-      .filter(q => q.required)
-      .filter(q => !answers[q.id]);
+    const surveySchema = createSurveyValidationSchema(survey.questions);
+    const result = surveySchema.safeParse(answers);
+    console.log(result.error, result.error?.formErrors, result.error?.format())
 
-    if (unansweredRequired.length > 0) {
-      toast.error("Please answer all required questions");
+    if (!result.success) {
+      setErrors(result.error.format());
+      toast.error("Please answer all required questions correctly.");
       return;
     }
+
 
     // Format answers for submission
     const formattedAnswers = Object.entries(answers).map(([questionId, value]) => ({
@@ -63,6 +71,22 @@ export default function SurveyPreview() {
     toast.success("Survey submitted successfully!");
     router.push("/");
   };
+
+  const handleAnswerChange = (questionId: string, value: any) => {
+    setAnswers((prev) => ({ ...prev, [questionId]: value }));
+    // Clear errors for the field when it's changed for a better UX
+    if (errors?.[questionId]) {
+      setErrors((prevErrors) => {
+        if (!prevErrors) return null;
+        const newErrors = { ...prevErrors };
+        delete (newErrors as any)[questionId];
+        return newErrors;
+      });
+    }
+  };
+
+  console.log('errors', errors?.['8954f9b4-87c3-4013-91b8-13d148ae9e84'])
+  console.log('questions', survey.questions)
 
   return (
     <div className="container mx-auto py-8">
@@ -84,9 +108,8 @@ export default function SurveyPreview() {
               key={question.id}
               question={question}
               value={answers[question.id]}
-              onChange={(value) =>
-                setAnswers({ ...answers, [question.id]: value })
-              }
+              error={errors?.[question.id]?._errors[0]}
+              onChange={(value) => handleAnswerChange(question.id, value)}
             />
           ))}
         </div>

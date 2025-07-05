@@ -16,11 +16,11 @@ interface QuestionDisplayProps {
   question: Question;
   value: any;
   onChange: (value: any) => void;
+  error?: string;
 }
 
-export function QuestionDisplay({ question, value, onChange }: QuestionDisplayProps) {
-  const isAnswered = value !== undefined && value !== "" && (!Array.isArray(value) || value.length > 0);
-  const showError = question.required && !isAnswered;
+export function QuestionDisplay({ question, value, onChange, error }: QuestionDisplayProps) {
+  const showError = !!error;
 
   return (
     <Card className={cn("p-6", showError && "border-destructive")}>
@@ -86,7 +86,7 @@ export function QuestionDisplay({ question, value, onChange }: QuestionDisplayPr
       )}
 
       {showError && (
-        <p className="text-sm text-destructive mt-2">This question is required</p>
+        <p className="text-sm text-destructive mt-2">{error}</p>
       )}
     </Card>
   );
