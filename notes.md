@@ -7,6 +7,7 @@ This file is intended to collect some thoughts and ideas that I have during the 
 
 - [ ] Progress bar when viewing survey
 - [ ] Share functionality UX
+- [x] Add an Error summary section on survey form
 
 ## Missing UI states or features
 - [x] Survey form field validation

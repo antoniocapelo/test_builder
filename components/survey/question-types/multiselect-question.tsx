@@ -59,7 +59,9 @@ export function MultiselectQuestion({
         <SelectTrigger className={cn(
           "w-full",
           selectedOptions?.length ? "border-dashed" : ""
-        )}>
+        )}
+          data-question-id={question.id}
+        >
           <SelectValue placeholder="Select options..." />
         </SelectTrigger>
         <SelectContent>

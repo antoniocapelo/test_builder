@@ -26,6 +26,7 @@ export function CheckboxQuestion({ question, value = [], onChange }: CheckboxQue
               );
             }}
             required={question.required && value.length === 0}
+            data-question-id={question.id}
           />
           <Label htmlFor={option.id}>{option.text}</Label>
         </div>

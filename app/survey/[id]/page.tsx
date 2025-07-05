@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import z from "zod";
 import { createSurveyValidationSchema } from "@/components/survey/validation";
 import { useZodFormValidation } from "@/hooks/use-zod-form-validation";
+import { Card } from "@/components/ui/card";
 
 
 export default function SurveyPreview() {
@@ -75,6 +76,21 @@ export default function SurveyPreview() {
     router.push("/");
   };
 
+  const handleErrorClick = () => {
+    // find first question that's present in the errors object
+    const firstError = survey.questions.find((question) => !!errors?.[question.id])
+
+    if (firstError) {
+      const el: HTMLElement | null = document.querySelector(`[data-question-id="${firstError.id}"]`);
+      if (el) {
+        // @ts-expect-error (this is an experimental feature, only works in FF for now)
+        el.focus({ focusVisible: true });
+      }
+
+    }
+  };
+
+
   const handleAnswerChange = (questionId: string, value: any) => {
     setAnswers((prev) => ({ ...prev, [questionId]: value }));
     // Clear errors for the field when it's changed for a better UX
@@ -106,6 +122,10 @@ export default function SurveyPreview() {
             />
           ))}
         </div>
+
+        {errors && <Card className="p-4 mt-6">
+          ⚠️ Your survey has errors. Click <button className="text-destructive" onClick={handleErrorClick}>here</button> to go to the first one.
+        </Card>}
 
         <div className="mt-8 flex justify-end">
           <Button onClick={handleSubmit}>Submit Survey</Button>

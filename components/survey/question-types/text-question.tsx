@@ -15,6 +15,7 @@ export function TextQuestion({ question, value, onChange }: TextQuestionProps) {
       value={value || ""}
       onChange={(e) => onChange(e.target.value)}
       required={question.required}
+      data-question-id={question.id}
     />
   );
 }
