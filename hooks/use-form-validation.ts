@@ -32,6 +32,10 @@ export function useFormValidation(currSchema?: z.ZodSchema): {
 
         if (!result.success) {
             const newErrors = result.error.format() as FormErrors;
+            if (newErrors?._errors) {
+                delete (newErrors as any)?._errors; // Remove the global error message
+            }
+
             setErrors(newErrors);
             return false;
         }
