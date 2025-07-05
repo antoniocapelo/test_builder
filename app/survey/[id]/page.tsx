@@ -44,7 +44,6 @@ export default function SurveyPreview() {
   const handleSubmit = () => {
     const surveySchema = createSurveyValidationSchema(survey.questions);
     const result = surveySchema.safeParse(answers);
-    console.log(result.error, result.error?.formErrors, result.error?.format())
 
     if (!result.success) {
       setErrors(result.error.format());
