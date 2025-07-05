@@ -1,8 +1,8 @@
-export type QuestionType = 
-  | 'checkbox' 
-  | 'radio' 
-  | 'multiselect' 
-  | 'singleselect' 
+export type QuestionType =
+  | 'checkbox'
+  | 'radio'
+  | 'multiselect'
+  | 'singleselect'
   | 'text'
   | 'date'
   | 'rating';
@@ -25,6 +25,7 @@ export interface Survey {
   title: string;
   description: string;
   questions: Question[];
+  showProgress?: boolean;
   createdAt: string;
 }
 

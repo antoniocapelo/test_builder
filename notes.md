@@ -8,6 +8,8 @@ This file is intended to collect some thoughts and ideas that I have during the 
 - [ ] Progress bar when viewing survey
 - [ ] Share functionality UX
 - [x] Add an Error summary section on survey form
+- [x] Add loading indicator
+- [ ] Table view for Homepage
 
 ## Missing UI states or features
 - [x] Survey form field validation
@@ -15,6 +17,7 @@ This file is intended to collect some thoughts and ideas that I have during the 
 - [x] Move zod validation to hook
 - [x] Add optional indicator instead of asterisk
 - [ ] Home page - no state for empty surveys list
+- [ ] Switch between edit/preview modes
 
 ## Possible improvements to base logic
 

@@ -8,13 +8,16 @@ import { Survey } from "@/types/survey";
 import { deleteSurvey, getSurveys } from "@/lib/survey";
 import { SurveyCard } from "@/components/survey/survey-card";
 import { toast } from "sonner";
+import Loading from "@/components/ui/loading";
 
 export default function Home() {
   const router = useRouter();
   const [surveys, setSurveys] = useState<Survey[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     setSurveys(getSurveys());
+    setIsLoading(false);
   }, []);
 
   const handleDelete = (id: string) => {
@@ -32,6 +35,12 @@ export default function Home() {
           Create New Test
         </Button>
       </div>
+
+      {isLoading && (
+        <div className="flex items-center justify-center h-64">
+          <Loading fullHeight text="Loading surveys..." />
+        </div>
+      )}
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {surveys.map((survey) => (

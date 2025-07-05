@@ -12,8 +12,9 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import z from "zod";
 import { createSurveyValidationSchema } from "@/components/survey/validation";
-import { useZodFormValidation } from "@/hooks/use-zod-form-validation";
+import { useFormValidation } from "@/hooks/use-form-validation";
 import { Card } from "@/components/ui/card";
+import Loading from "@/components/ui/loading";
 
 
 export default function SurveyPreview() {
@@ -22,10 +23,12 @@ export default function SurveyPreview() {
   const [answers, setAnswers] = useState<Record<string, any>>({});
   const router = useRouter();
   const [surveySchema, setSurveySchema] = useState<z.ZodSchema>();
-  const { errors, resetError, validate } = useZodFormValidation(surveySchema)
+  const { errors, resetError, validate } = useFormValidation(surveySchema)
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (params.id) {
+      setIsLoading(false)
       const loadedSurvey = getSurveyById(params.id as string);
       setSurvey(loadedSurvey);
 
@@ -35,6 +38,10 @@ export default function SurveyPreview() {
       }
     }
   }, [params.id]);
+
+  if (isLoading) {
+    return <Loading fullHeight text="Loading survey..." />;
+  }
 
   if (!survey) {
     return <div>Survey not found</div>;
