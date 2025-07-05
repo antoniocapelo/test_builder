@@ -22,6 +22,7 @@ export default function CreateSurvey() {
     description: "",
     questions: [],
     createdAt: new Date().toISOString(),
+    modifiedAt: new Date().toISOString(),
   });
   const { errors, validate, resetError } = useFormValidation(surveySchema)
 
@@ -83,6 +84,7 @@ export default function CreateSurvey() {
     if (!isValid) {
       return;
     }
+    survey.modifiedAt = new Date().toISOString();
     saveSurvey(survey);
 
     toast.success(<span>Test saved successfully! You can view it <Link className="text-primary underline" href={`/survey/${survey.id}`}>here</Link></span>);

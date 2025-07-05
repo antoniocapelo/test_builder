@@ -28,3 +28,4 @@ This file is intended to collect some thoughts and ideas that I have during the 
 ## Caveats
 - "Error summary" focus does not work as I'd like in all major browsers
 - Error handling UX could be better (parsing json, not found, etc)
+- search functionality

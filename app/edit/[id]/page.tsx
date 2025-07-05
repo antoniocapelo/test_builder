@@ -75,6 +75,8 @@ export default function EditSurvey() {
     if (!isValid) {
       return;
     }
+
+    survey.modifiedAt = new Date().toISOString();
     saveSurvey(survey);
     router.push("/");
   };
