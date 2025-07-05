@@ -8,7 +8,7 @@ type FormErrors = z.ZodFormattedError<
 > | null
 
 /**
- * Reusable logic for dealing with form validations. A schema is provided and the hook centralizes the error states, resetting errors, and imperative validation
+ * Reusable logic for dealing with form validations. A schema is provided and the hook centralizes the error state management, resetting errors, and imperative validation
  */
 export function useZodFormValidation(currSchema?: z.ZodSchema): {
     errors: FormErrors;
