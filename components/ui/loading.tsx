@@ -8,7 +8,7 @@ const columns = [
     { x: 8, y: 9, height: 4.9, width: 4 },  // right
 ];
 
-const speeds = [1.5, 1.1, 0.8].map(e => e * 1.4); // seconds for each column
+const speeds = [1.5, 1.1, 0.8].map(e => e * 1.1); // seconds for each column
 
 export default function Loading({ text, fullHeight }: { text?: string, fullHeight?: boolean }) {
     return (

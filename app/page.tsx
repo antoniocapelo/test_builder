@@ -45,6 +45,8 @@ export default function Home() {
     survey.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const noResults = !isLoading && filteredSurveys.length === 0;
+
   return (
     <div className="container mx-auto py-8">
       <div className="flex justify-between items-center mb-8">
@@ -90,6 +92,13 @@ export default function Home() {
               onDelete={handleDelete}
             />
           ))}
+          {noResults && (
+            <div className="p-6 flex w-full flex-col items-center justify-center">
+              <p className="text-muted-foreground text-center">
+                No surveys found
+              </p>
+            </div>
+          )}
         </div>
       ) : (
         <div className="overflow-x-auto rounded-lg bg-card border ">
@@ -118,6 +127,13 @@ export default function Home() {
                   </TableCell>
                 </TableRow>
               ))}
+              {noResults && (
+                <TableRow>
+                  <TableCell colSpan={4} className="text-center py-6">
+                    <p className="text-muted-foreground">No surveys found</p>
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </div>
