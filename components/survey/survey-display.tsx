@@ -13,11 +13,12 @@ import { Share2 } from "lucide-react";
 import { toast } from "sonner";
 
 
-export default function SurveyDisplay({ survey, answers, onAnswerChange, errors }: {
+export default function SurveyDisplay({ survey, answers, onAnswerChange, errors, showShare }: {
     survey: Survey,
     answers: Record<string, any>,
     errors?: FormErrors;
     onAnswerChange: (questionId: string, value: any) => void
+    showShare?: boolean;
 }) {
     const handleShare = () => {
         const link = generateShareableLink(survey!.id);
@@ -57,10 +58,11 @@ export default function SurveyDisplay({ survey, answers, onAnswerChange, errors 
                     <h1 className="text-3xl font-bold mb-2">{survey.title}</h1>
                     <p className="text-muted-foreground">{survey.description}</p>
                 </div>
-                <Button onClick={handleShare}>
-                    <Share2 className="mr-2 h-4 w-4" />
-                    Share
-                </Button>
+                {showShare && (
+                    <Button variant="outline" size="icon" onClick={handleShare}>
+                        <Share2 className="h-4 w-4" />
+                    </Button>
+                )}
             </div>
 
             <div className="space-y-6">

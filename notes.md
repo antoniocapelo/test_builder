@@ -6,9 +6,10 @@ This file is intended to collect some thoughts and ideas that I have during the 
 ## UI/UX improvements
 
 - [x] Progress bar when viewing survey
-- [ ] Share functionality UX
+- [x] Fix broken toasts
 - [x] Add an Error summary section on survey form
 - [x] Add loading indicator
+- [x] Success toast with link to new survey
 - [ ] Table view for Homepage
 
 ## Missing UI states or features

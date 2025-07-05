@@ -11,6 +11,8 @@ import { loadDraft, saveDraft, saveSurvey } from "@/lib/survey";
 import { Question, Survey, surveySchema } from "@/types/survey";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import Link from "next/link";
 
 export default function CreateSurvey() {
   const router = useRouter();
@@ -79,11 +81,11 @@ export default function CreateSurvey() {
   const handleSave = () => {
     const isValid = validate(survey)
     if (!isValid) {
-      debugger
       return;
     }
     saveSurvey(survey);
 
+    toast.success(<span>Test saved successfully! You can view it <Link className="text-primary underline" href={`/survey/${survey.id}`}>here</Link></span>);
     router.push("/");
   };
 

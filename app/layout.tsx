@@ -2,6 +2,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Inter } from 'next/font/google';
+import { Toaster, toast } from 'sonner';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -18,6 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className + " bg-[#f6f8fa] min-h-screen flex flex-col"}>
+        <Toaster />
         {/* Header */}
         <header className="bg-white shadow-sm rounded-b-xl px-8 py-3 flex items-center justify-between sticky top-0 z-30">
           <div className="flex items-center gap-8">

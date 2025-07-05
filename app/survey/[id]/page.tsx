@@ -7,7 +7,7 @@ import { createSurveyValidationSchema } from "@/components/survey/validation";
 import { Button } from "@/components/ui/button";
 import Loading from "@/components/ui/loading";
 import { useFormValidation } from "@/hooks/use-form-validation";
-import { generateShareableLink, getSurveyById, saveSurveyResponse } from "@/lib/survey";
+import { getSurveyById, saveSurveyResponse } from "@/lib/survey";
 import { Survey } from "@/types/survey";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -83,7 +83,13 @@ export default function SurveyPreview() {
   return (
     <div className="container mx-auto py-8">
       <div className="max-w-3xl mx-auto">
-        <SurveyDisplay survey={survey} answers={answers} onAnswerChange={handleAnswerChange} errors={errors} />
+        <SurveyDisplay
+          answers={answers}
+          errors={errors}
+          onAnswerChange={handleAnswerChange}
+          showShare
+          survey={survey}
+        />
 
         <div className="mt-8 flex justify-end">
           <Button onClick={handleSubmit}>Submit Survey</Button>
