@@ -113,6 +113,7 @@ export default function Home() {
                       <Link href={`/survey/${survey.id}/responses`}><Button variant="link" size="sm" >Responses</Button></Link>
                       <Link href={`/edit/${survey.id}`}> <Button variant="link" size="sm">Edit</Button></Link>
                       <Button variant="link" size="sm" onClick={() => handleShare(survey)}>Share</Button>
+                      <Button variant="link" className="text-destructive" size="sm" onClick={() => handleDelete(survey.id)}>Delete</Button>
                     </span>
                   </TableCell>
                 </TableRow>
