@@ -2,6 +2,8 @@
 
 import { QuestionBuilder } from "@/components/survey/question-builder";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useFormValidation } from "@/hooks/use-form-validation";
@@ -95,8 +97,21 @@ export default function CreateSurvey() {
               setSurvey({ ...survey, description: e.target.value })
             }
           />
+
+          <div className="flex items-center space-x-2 px-3">
+            <Checkbox
+              id="show-progress"
+              name="show-progress"
+              checked={survey.showProgress || false}
+              onCheckedChange={() => {
+                setSurvey({ ...survey, showProgress: !survey.showProgress });
+              }}
+            />
+            <Label htmlFor="show-progress">Show progress bar</Label>
+          </div>
         </div>
 
+        <h2 className="text-2xl font-bold mb-3 mt-6">Questions</h2>
         <div className="space-y-4 mb-8">
           {survey.questions.map((question) => (
             <QuestionBuilder

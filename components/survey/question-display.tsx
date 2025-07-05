@@ -86,7 +86,7 @@ export function QuestionDisplay({ question, value, onChange, error }: QuestionDi
       )}
 
       {showError && (
-        <p className="text-sm text-destructive mt-2">{error}</p>
+        <p className={cn('text-sm text-destructive mt-2')}>{error}</p>
       )}
     </Card>
   );
