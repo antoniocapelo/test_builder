@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import z from "zod";
 
-type FormErrors = z.ZodFormattedError<
+export type FormErrors = z.ZodFormattedError<
     Record<string, any>
 > | null
 

@@ -2,20 +2,17 @@
 
 export const dynamic = 'force-dynamic';
 
+import SurveyDisplay from "@/components/survey/survey-display";
+import { createSurveyValidationSchema } from "@/components/survey/validation";
 import { Button } from "@/components/ui/button";
-import { QuestionDisplay } from "@/components/survey/question-display";
+import Loading from "@/components/ui/loading";
+import { useFormValidation } from "@/hooks/use-form-validation";
 import { generateShareableLink, getSurveyById, saveSurveyResponse } from "@/lib/survey";
 import { Survey } from "@/types/survey";
-import { Share2 } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import z from "zod";
-import { createSurveyValidationSchema } from "@/components/survey/validation";
-import { useFormValidation } from "@/hooks/use-form-validation";
-import { Card } from "@/components/ui/card";
-import Loading from "@/components/ui/loading";
-import ProgressBar from "@/components/ui/progress-bar";
 
 
 export default function SurveyPreview() {
@@ -48,14 +45,6 @@ export default function SurveyPreview() {
     return <div>Survey not found</div>;
   }
 
-
-
-  const handleShare = () => {
-    const link = generateShareableLink(survey!.id);
-    navigator.clipboard.writeText(link);
-    toast.success("Link copied to clipboard!");
-  };
-
   const handleSubmit = () => {
     const isValid = validate(answers);
 
@@ -84,20 +73,6 @@ export default function SurveyPreview() {
     router.push("/");
   };
 
-  const handleErrorClick = () => {
-    // find first question that's present in the errors object
-    const firstError = survey.questions.find((question) => !!errors?.[question.id])
-
-    if (firstError) {
-      const el: HTMLElement | null = document.querySelector(`[data-question-id="${firstError.id}"]`);
-      if (el) {
-        // @ts-expect-error (this is an experimental feature, only works in FF for now)
-        el.focus({ focusVisible: true });
-      }
-
-    }
-  };
-
 
   const handleAnswerChange = (questionId: string, value: any) => {
     setAnswers((prev) => ({ ...prev, [questionId]: value }));
@@ -108,42 +83,7 @@ export default function SurveyPreview() {
   return (
     <div className="container mx-auto py-8">
       <div className="max-w-3xl mx-auto">
-        {survey.showProgress && (
-          <ProgressBar
-            className="sticky top-[52px] z-10"
-            value={
-              survey.questions.length === 0
-                ? 0
-                : Object.keys(answers).length / survey.questions.length
-            }
-          />
-        )}
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-3xl font-bold mb-2">{survey.title}</h1>
-            <p className="text-muted-foreground">{survey.description}</p>
-          </div>
-          <Button onClick={handleShare}>
-            <Share2 className="mr-2 h-4 w-4" />
-            Share
-          </Button>
-        </div>
-
-        <div className="space-y-6">
-          {survey.questions.map((question) => (
-            <QuestionDisplay
-              key={question.id}
-              question={question}
-              value={answers[question.id]}
-              error={errors?.[question.id]?._errors[0]}
-              onChange={(value) => handleAnswerChange(question.id, value)}
-            />
-          ))}
-        </div>
-
-        {Object.keys(errors || {}).length > 0 && <Card className="p-4 mt-6">
-          ⚠️ Your survey has errors. Click <button className="text-destructive" onClick={handleErrorClick}>here</button> to go to the first one.
-        </Card>}
+        <SurveyDisplay survey={survey} answers={answers} onAnswerChange={handleAnswerChange} errors={errors} />
 
         <div className="mt-8 flex justify-end">
           <Button onClick={handleSubmit}>Submit Survey</Button>

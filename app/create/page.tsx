@@ -7,17 +7,10 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useFormValidation } from "@/hooks/use-form-validation";
-import { saveSurvey } from "@/lib/survey";
-import { Question, Survey } from "@/types/survey";
+import { loadDraft, saveDraft, saveSurvey } from "@/lib/survey";
+import { Question, Survey, surveySchema } from "@/types/survey";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import z from 'zod'
-
-const surveySchema = z.object({
-  title: z.string().min(1, { message: 'Title is required' }),
-  description: z.string(),
-  questions: z.array(z.any()).min(1, { message: 'At least one question is required' })
-})
+import { useEffect, useState } from "react";
 
 export default function CreateSurvey() {
   const router = useRouter();
@@ -29,6 +22,13 @@ export default function CreateSurvey() {
     createdAt: new Date().toISOString(),
   });
   const { errors, validate, resetError } = useFormValidation(surveySchema)
+
+  useEffect(() => {
+    const savedDraft = loadDraft();
+    if (savedDraft) {
+      setSurvey(savedDraft);
+    }
+  }, [])
 
   const addQuestion = () => {
     resetError('questions');
@@ -43,6 +43,21 @@ export default function CreateSurvey() {
       ...survey,
       questions: [...survey.questions, newQuestion],
     });
+  };
+
+  const previewChanges = () => {
+    const isValid = validate(survey)
+    if (!isValid) {
+      return;
+    }
+    // For now, just log the survey to console
+    console.log("Preview Survey:", survey);
+
+    saveDraft(survey);
+
+    router.push(
+      '/survey/preview',
+    );
   };
 
   const updateQuestion = (updatedQuestion: Question) => {
@@ -64,9 +79,11 @@ export default function CreateSurvey() {
   const handleSave = () => {
     const isValid = validate(survey)
     if (!isValid) {
+      debugger
       return;
     }
     saveSurvey(survey);
+
     router.push("/");
   };
 
@@ -113,6 +130,11 @@ export default function CreateSurvey() {
 
         <h2 className="text-2xl font-bold mb-3 mt-6">Questions</h2>
         <div className="space-y-4 mb-8">
+          {!survey.questions.length && (
+            <p className="text-sm text-muted-foreground">
+              No questions added yet. Click "Add Question" to start.
+            </p>
+          )}
           {survey.questions.map((question) => (
             <QuestionBuilder
               key={question.id}
@@ -126,6 +148,9 @@ export default function CreateSurvey() {
         <div className="flex gap-4">
           <Button onClick={addQuestion} variant="outline">
             Add Question
+          </Button>
+          <Button onClick={previewChanges} variant="outline">
+            Preview Changes
           </Button>
           <Button onClick={handleSave}>Save Test</Button>
         </div>

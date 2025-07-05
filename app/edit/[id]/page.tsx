@@ -9,8 +9,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Loading from "@/components/ui/loading";
 import { Textarea } from "@/components/ui/textarea";
+import { useFormValidation } from "@/hooks/use-form-validation";
 import { getSurveyById, saveSurvey } from "@/lib/survey";
-import { Question, Survey } from "@/types/survey";
+import { Question, Survey, surveySchema } from "@/types/survey";
 import { set } from "date-fns";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -20,6 +21,7 @@ export default function EditSurvey() {
   const params = useParams();
   const [survey, setSurvey] = useState<Survey | undefined>();
   const [isLoading, setIsLoading] = useState(true);
+  const { errors, validate, resetError } = useFormValidation(surveySchema)
 
   useEffect(() => {
     if (params.id) {
@@ -68,6 +70,11 @@ export default function EditSurvey() {
 
   const handleSave = () => {
     if (!survey) return;
+    const isValid = validate(survey)
+
+    if (!isValid) {
+      return;
+    }
     saveSurvey(survey);
     router.push("/");
   };
@@ -87,6 +94,7 @@ export default function EditSurvey() {
             value={survey.title}
             onChange={(e) => setSurvey({ ...survey, title: e.target.value })}
           />
+          {errors?.title && <p className="text-sm text-destructive mt-2">{errors.title._errors}</p>}
           <Textarea
             placeholder="Test Description"
             value={survey.description}
@@ -111,6 +119,11 @@ export default function EditSurvey() {
 
         <h2 className="text-2xl font-bold mb-3 mt-6">Questions</h2>
         <div className="space-y-4 mb-8">
+          {!survey.questions.length && (
+            <p className="text-sm text-muted-foreground">
+              No questions added yet. Click "Add Question" to start.
+            </p>
+          )}
           {survey.questions.map((question) => (
             <QuestionBuilder
               key={question.id}
@@ -127,6 +140,7 @@ export default function EditSurvey() {
           </Button>
           <Button onClick={handleSave}>Save Changes</Button>
         </div>
+        {errors?.questions && <p className="text-sm text-destructive mt-2">{errors.questions._errors}</p>}
       </div>
     </div>
   );

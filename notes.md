@@ -17,7 +17,7 @@ This file is intended to collect some thoughts and ideas that I have during the 
 - [x] Move zod validation to hook
 - [x] Add optional indicator instead of asterisk
 - [ ] Home page - no state for empty surveys list
-- [ ] Switch between edit/preview modes
+- [x] Switch between edit/preview modes
 
 ## Possible improvements to base logic
 
@@ -26,3 +26,4 @@ This file is intended to collect some thoughts and ideas that I have during the 
 
 ## Caveats
 - "Error summary" focus does not work as I'd like in all major browsers
+- Error handling UX could be better (parsing json, not found, etc)
