@@ -29,6 +29,7 @@ export interface Survey {
   questions: Question[];
   showProgress?: boolean;
   createdAt: string;
+  modifiedAt?: string;
 }
 
 export interface Answer {

@@ -22,7 +22,6 @@ export default function CreateSurvey() {
     description: "",
     questions: [],
     createdAt: new Date().toISOString(),
-    modifiedAt: new Date().toISOString(),
   });
   const { errors, validate, resetError } = useFormValidation(surveySchema)
 
