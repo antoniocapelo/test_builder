@@ -15,6 +15,7 @@ import { createSurveyValidationSchema } from "@/components/survey/validation";
 import { useFormValidation } from "@/hooks/use-form-validation";
 import { Card } from "@/components/ui/card";
 import Loading from "@/components/ui/loading";
+import ProgressBar from "@/components/ui/progress-bar";
 
 
 export default function SurveyPreview() {
@@ -107,6 +108,16 @@ export default function SurveyPreview() {
   return (
     <div className="container mx-auto py-8">
       <div className="max-w-3xl mx-auto">
+        {survey.showProgress && (
+          <ProgressBar
+            className="sticky top-[52px] z-10"
+            value={
+              survey.questions.length === 0
+                ? 0
+                : Object.keys(answers).length / survey.questions.length
+            }
+          />
+        )}
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-3xl font-bold mb-2">{survey.title}</h1>

@@ -4,10 +4,14 @@ export const dynamic = 'force-dynamic';
 
 import { QuestionBuilder } from "@/components/survey/question-builder";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import Loading from "@/components/ui/loading";
 import { Textarea } from "@/components/ui/textarea";
 import { getSurveyById, saveSurvey } from "@/lib/survey";
 import { Question, Survey } from "@/types/survey";
+import { set } from "date-fns";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -15,10 +19,12 @@ export default function EditSurvey() {
   const router = useRouter();
   const params = useParams();
   const [survey, setSurvey] = useState<Survey | undefined>();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (params.id) {
       const loadedSurvey = getSurveyById(params.id as string);
+      setIsLoading(false);
       if (loadedSurvey) {
         setSurvey(loadedSurvey);
       } else {
@@ -66,8 +72,8 @@ export default function EditSurvey() {
     router.push("/");
   };
 
-  if (!survey) {
-    return <div>Loading...</div>;
+  if (isLoading || !survey) {
+    return <Loading fullHeight text="Loading survey..." />;
   }
 
   return (
@@ -88,8 +94,22 @@ export default function EditSurvey() {
               setSurvey({ ...survey, description: e.target.value })
             }
           />
+
+          <div className="flex items-center space-x-2 px-3">
+            <Checkbox
+              id="show-progress"
+              name="show-progress"
+              checked={survey.showProgress || false}
+              onCheckedChange={() => {
+                setSurvey({ ...survey, showProgress: !survey.showProgress });
+              }}
+            />
+            <Label htmlFor="show-progress">Show progress bar</Label>
+          </div>
         </div>
 
+
+        <h2 className="text-2xl font-bold mb-3 mt-6">Questions</h2>
         <div className="space-y-4 mb-8">
           {survey.questions.map((question) => (
             <QuestionBuilder

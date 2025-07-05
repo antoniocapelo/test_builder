@@ -5,7 +5,7 @@ This file is intended to collect some thoughts and ideas that I have during the 
 
 ## UI/UX improvements
 
-- [ ] Progress bar when viewing survey
+- [x] Progress bar when viewing survey
 - [ ] Share functionality UX
 - [x] Add an Error summary section on survey form
 - [x] Add loading indicator
@@ -22,3 +22,7 @@ This file is intended to collect some thoughts and ideas that I have during the 
 ## Possible improvements to base logic
 
 - [ ] lib/survey always reads from LS - we could cache this value for read purposes (P2)
+
+
+## Caveats
+- "Error summary" focus does not work as I'd like in all major browsers

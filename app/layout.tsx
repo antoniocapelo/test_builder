@@ -1,5 +1,6 @@
 import './globals.css';
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { Inter } from 'next/font/google';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -16,7 +17,41 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className + " bg-[#f6f8fa] min-h-screen flex flex-col"}>
+        {/* Header */}
+        <header className="bg-white shadow-sm rounded-b-xl px-8 py-3 flex items-center justify-between sticky top-0 z-30">
+          <div className="flex items-center gap-8">
+            {/* Logo and App Name */}
+            <div className="flex items-center gap-2">
+              <Link href="/" className="font-medium hover:text-black flex gap-2">
+                <img src="/logo.svg" alt="Survey Builder Logo" className="h-6 w-6" />
+                <span className="font-bold text-lg tracking-tight">Survey Builder</span>
+              </Link>
+            </div>
+            {/* Navigation Links */}
+            <nav className="hidden md:flex gap-6 text-sm text-gray-700">
+              <Link href="/" className="font-medium hover:text-black">My Surveys</Link>
+            </nav>
+          </div>
+          {/* <div className="flex-1 flex justify-center">
+            <div className="relative w-full max-w-xs">
+              <input
+                type="text"
+                placeholder="Search"
+                className="w-full pl-10 pr-4 py-2 rounded-md border border-gray-200 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-200"
+              />
+              <svg className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+            </div>
+          </div> */}
+        </header>
+        {/* Main Content */}
+        <main className="px-4 md:px-12 py-8 max-w-5xl mx-auto flex-1 flex flex-col w-full">
+          {children}
+        </main>
+      </body>
     </html>
   );
 }

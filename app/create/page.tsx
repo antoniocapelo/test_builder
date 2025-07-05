@@ -4,7 +4,7 @@ import { QuestionBuilder } from "@/components/survey/question-builder";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useZodFormValidation } from "@/hooks/use-zod-form-validation";
+import { useFormValidation } from "@/hooks/use-form-validation";
 import { saveSurvey } from "@/lib/survey";
 import { Question, Survey } from "@/types/survey";
 import { useRouter } from "next/navigation";
@@ -26,7 +26,7 @@ export default function CreateSurvey() {
     questions: [],
     createdAt: new Date().toISOString(),
   });
-  const { errors, validate, resetError } = useZodFormValidation(surveySchema)
+  const { errors, validate, resetError } = useFormValidation(surveySchema)
 
   const addQuestion = () => {
     resetError('questions');
