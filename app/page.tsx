@@ -53,7 +53,7 @@ export default function Home() {
         <h1 className="text-3xl font-bold">Frontend Engineer Test Builder</h1>
         <Button onClick={() => router.push("/create")}>
           <PlusCircle className="mr-2 h-4 w-4" />
-          Create New Test
+          Create Test
         </Button>
       </div>
       <div className="flex gap-4 items-center justify-between w-full mb-6">
@@ -68,9 +68,8 @@ export default function Home() {
           />
 
           <div className="flex items-center gap-4">
-            <span className="text-sm">Cards</span>
+            <span className="text-xs">Table view</span>
             <Switch checked={viewType === 'table'} onCheckedChange={toggleViewType} />
-            <span className="text-sm">Table</span>
 
           </div>
         </div>
