@@ -32,14 +32,14 @@ export function SurveyCard({ survey, onDelete }: SurveyCardProps) {
       <div className="flex gap-2 flex-wrap">
         <Button
           variant="outline"
-          size="sm"
+          size="xs"
           onClick={() => router.push(`/edit/${survey.id}`)}
         >
           <Pencil className="h-4 w-4 mr-2" />
           Edit
         </Button>
         <Button
-          size="sm"
+          size="xs"
           onClick={() => router.push(`/survey/${survey.id}`)}
         >
           <PlayCircle className="h-4 w-4 mr-2" />
@@ -47,7 +47,7 @@ export function SurveyCard({ survey, onDelete }: SurveyCardProps) {
         </Button>
         <Button
           variant="outline"
-          size="sm"
+          size="xs"
           onClick={() => router.push(`/survey/${survey.id}/responses`)}
         >
           <ListChecks className="h-4 w-4 mr-2" />
@@ -55,7 +55,7 @@ export function SurveyCard({ survey, onDelete }: SurveyCardProps) {
         </Button>
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button variant="destructive" size="sm">
+            <Button variant="destructive" size="xs">
               <Trash2 className="h-4 w-4 mr-2" />
               Delete
             </Button>

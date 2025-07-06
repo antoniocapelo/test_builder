@@ -1,19 +1,20 @@
 "use client";
+import { Pencil, PlayCircle, Trash2, ListChecks, Share2 } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import { PlusCircle } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { Survey } from "@/types/survey";
-import { deleteSurvey, generateShareableLink, getSurveyResponses, getSurveys } from "@/lib/survey";
 import { SurveyCard } from "@/components/survey/survey-card";
-import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import Loading from "@/components/ui/loading";
-import { Switch } from "@/components/ui/switch";
+import { SegmentedControl } from "@/components/ui/segmented-control";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useViewType } from "@/hooks/use-view-type";
+import { ViewType } from "@/lib/layout";
+import { deleteSurvey, generateShareableLink, getSurveyResponses, getSurveys } from "@/lib/survey";
+import { Survey } from "@/types/survey";
+import { PlusCircle } from "lucide-react";
 import Link from "next/link";
-import { Card } from "@/components/ui/card";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function Home() {
   const router = useRouter();
@@ -68,9 +69,16 @@ export default function Home() {
           />
 
           <div className="flex items-center gap-4">
-            <span className="text-xs">Table view</span>
-            <Switch checked={viewType === 'table'} onCheckedChange={toggleViewType} />
-
+            <SegmentedControl<ViewType>
+              value={viewType}
+              onChange={(val) => {
+                if (val !== viewType) toggleViewType();
+              }}
+              options={[
+                { label: "Cards", value: "grid", },
+                { label: "Table", value: "table" },
+              ]}
+            />
           </div>
         </div>
 
@@ -117,11 +125,23 @@ export default function Home() {
                   <TableCell>{getSurveyResponses(survey.id).length ?? 0}</TableCell>
                   <TableCell>{survey.modifiedAt ? new Date(survey.modifiedAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }) : '-'}</TableCell>
                   <TableCell align="right">
-                    <span className="space-x-2">
-                      <Link href={`/survey/${survey.id}/responses`}><Button variant="link" size="sm" >Responses</Button></Link>
-                      <Link href={`/edit/${survey.id}`}> <Button variant="link" size="sm">Edit</Button></Link>
-                      <Button variant="link" size="sm" onClick={() => handleShare(survey)}>Share</Button>
-                      <Button variant="link" className="text-destructive" size="sm" onClick={() => handleDelete(survey.id)}>Delete</Button>
+                    <span className="">
+                      <Button variant="ghost" title="Responses" size="icon" asChild>
+                        <Link href={`/survey/${survey.id}/responses`}>
+                          <ListChecks className="h-4 w-4 mr-2" />
+                        </Link>
+                      </Button>
+                      <Button variant="link" size="sm" asChild title="Edit">
+                        <Link href={`/edit/${survey.id}`}>
+                          <Pencil className="h-4 w-4 mr-2" />
+                        </Link>
+                      </Button>
+                      <Button title="Share" variant="link" size="sm" onClick={() => handleShare(survey)}>
+                        <Share2 className="h-4 w-4 mr-2" />
+                      </Button>
+                      <Button title="Delete" variant="link" className="text-destructive" size="sm" onClick={() => handleDelete(survey.id)}>
+                        <Trash2 className="h-4 w-4 mr-2" />
+                      </Button>
                     </span>
                   </TableCell>
                 </TableRow>
