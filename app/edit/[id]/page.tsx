@@ -9,6 +9,7 @@ import { SurveyForm } from "@/components/survey/survey-form";
 import { useParams, useRouter } from "next/navigation";
 import { Dispatch, useEffect, useState } from "react";
 import Loading from "@/components/ui/loading";
+import { toast } from "sonner";
 
 export default function EditSurvey() {
   const router = useRouter();
@@ -37,6 +38,7 @@ export default function EditSurvey() {
     }
     survey.modifiedAt = new Date().toISOString();
     saveSurvey(survey);
+    toast.success(' Survey saved successfully!');
     router.push("/");
   };
 

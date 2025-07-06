@@ -13,9 +13,10 @@ interface QuestionBuilderProps {
   question: Question;
   onUpdate: (question: Question) => void;
   onDelete: (id: string) => void;
+  error: string | undefined;
 }
 
-export function QuestionBuilder({ question, onUpdate, onDelete }: QuestionBuilderProps) {
+export function QuestionBuilder({ question, onUpdate, onDelete, error }: QuestionBuilderProps) {
   const questionTypes: { value: QuestionType; label: string }[] = [
     { value: "text", label: "Text Input" },
     { value: "checkbox", label: "Checkbox (Multiple Choice)" },
@@ -25,7 +26,17 @@ export function QuestionBuilder({ question, onUpdate, onDelete }: QuestionBuilde
     { value: "date", label: "Date Picker" },
     { value: "rating", label: "Rating" },
   ];
-
+  let errorMsg;
+  if (error) {
+    // Find the first property with _errors and display its first error message
+    errorMsg = typeof error === "object" && error !== null
+      ? Object.values(error)
+        .flatMap((v: any) => v?._errors || [])
+        .filter(Boolean)[0]
+      : typeof error === "string"
+        ? error
+        : null
+  }
   const showOptions = ["checkbox", "radio", "multiselect", "singleselect"].includes(question.type);
 
   const handleOptionAdd = () => {
@@ -121,6 +132,11 @@ export function QuestionBuilder({ question, onUpdate, onDelete }: QuestionBuilde
             Add Option
           </Button>
         </div>
+      )}
+      {errorMsg && (
+        <p className="text-sm text-destructive mt-2">
+          {errorMsg}
+        </p>
       )}
     </Card>
   );

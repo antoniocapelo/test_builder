@@ -63,9 +63,10 @@ export const SurveyForm: React.FC<SurveyFormProps> = ({
     };
 
     const updateQuestion = (updatedQuestion: Question) => {
+        resetError("questions");
         setSurvey({
             ...survey,
-            questions: survey.questions.map((q) =>
+            questions: survey.questions.map((q: Question) =>
                 q.id === updatedQuestion.id ? updatedQuestion : q
             ),
         });
@@ -130,8 +131,9 @@ export const SurveyForm: React.FC<SurveyFormProps> = ({
                             No questions added yet. Click "Add Question" to start.
                         </p>
                     )}
-                    {survey.questions.map((question) => (
+                    {survey.questions.map((question: Question, idx: number) => (
                         <QuestionBuilder
+                            error={errors?.questions?.[idx]}
                             key={question.id}
                             question={question}
                             onUpdate={updateQuestion}
