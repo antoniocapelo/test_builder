@@ -2,17 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+import { DeleteAlertDialog } from "@/components/ui/delete-alert-dialog";
 import { Survey } from "@/types/survey";
 import { Pencil, PlayCircle, Trash2, ListChecks } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -53,32 +43,15 @@ export function SurveyCard({ survey, onDelete }: SurveyCardProps) {
           <ListChecks className="h-4 w-4 mr-2" />
           Responses
         </Button>
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
+        <DeleteAlertDialog
+          onDelete={() => onDelete(survey.id)}
+          trigger={
             <Button variant="destructive" size="xs">
               <Trash2 className="h-4 w-4 mr-2" />
               Delete
             </Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-              <AlertDialogDescription>
-                This action cannot be undone. This will permanently delete the
-                survey and all its data.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction
-                onClick={() => onDelete(survey.id)}
-                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-              >
-                Delete
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+          }
+        />
       </div>
     </Card>
   );

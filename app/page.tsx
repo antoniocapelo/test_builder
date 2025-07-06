@@ -1,5 +1,6 @@
 "use client";
-import { Pencil, PlayCircle, Trash2, ListChecks, Share2 } from "lucide-react";
+import { Pencil, Trash2, ListChecks, Share2, MoreVertical } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 import { SurveyCard } from "@/components/survey/survey-card";
 import { Button } from "@/components/ui/button";
@@ -15,13 +16,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { DeleteAlertDialog } from "@/components/ui/delete-alert-dialog";
 
 export default function Home() {
   const router = useRouter();
   const [surveys, setSurveys] = useState<Survey[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { toggleViewType, viewType } = useViewType('/')
-  const [viewMode, setViewMode] = useState<'cards' | 'table'>('cards');
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
@@ -125,24 +126,64 @@ export default function Home() {
                   <TableCell>{getSurveyResponses(survey.id).length ?? 0}</TableCell>
                   <TableCell>{survey.modifiedAt ? new Date(survey.modifiedAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }) : '-'}</TableCell>
                   <TableCell align="right">
-                    <span className="">
-                      <Button variant="ghost" title="Responses" size="icon" asChild>
-                        <Link href={`/survey/${survey.id}/responses`}>
-                          <ListChecks className="h-4 w-4 mr-2" />
-                        </Link>
-                      </Button>
-                      <Button variant="link" size="sm" asChild title="Edit">
-                        <Link href={`/edit/${survey.id}`}>
-                          <Pencil className="h-4 w-4 mr-2" />
-                        </Link>
-                      </Button>
-                      <Button title="Share" variant="link" size="sm" onClick={() => handleShare(survey)}>
-                        <Share2 className="h-4 w-4 mr-2" />
-                      </Button>
-                      <Button title="Delete" variant="link" className="text-destructive" size="sm" onClick={() => handleDelete(survey.id)}>
-                        <Trash2 className="h-4 w-4 mr-2" />
-                      </Button>
-                    </span>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button variant="ghost" size="icon" title="Actions">
+                          <MoreVertical className="h-5 w-5" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent align="end" className="w-44 p-1">
+                        <Button
+                          variant="ghost"
+                          className="w-full justify-start"
+                          asChild
+                          title="Responses"
+                          size="sm"
+                        >
+                          <Link href={`/survey/${survey.id}/responses`}>
+                            <ListChecks className="h-4 w-4 mr-2" />
+                            Responses
+                          </Link>
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          className="w-full justify-start"
+                          asChild
+                          title="Edit"
+                          size="sm"
+                        >
+                          <Link href={`/edit/${survey.id}`}>
+                            <Pencil className="h-4 w-4 mr-2" />
+                            Edit
+                          </Link>
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          className="w-full justify-start"
+                          title="Share"
+                          size="sm"
+                          onClick={() => handleShare(survey)}
+                        >
+                          <Share2 className="h-4 w-4 mr-2" />
+                          Share
+                        </Button>
+                        <DeleteAlertDialog
+                          onDelete={() => handleDelete(survey.id)}
+                          trigger={
+                            <Button
+                              variant="ghost"
+                              className="w-full justify-start text-destructive"
+                              title="Delete"
+                              size="sm"
+                            >
+                              <Trash2 className="h-4 w-4 mr-2" />
+                              Delete
+                            </Button>
+                          }
+                        />
+
+                      </PopoverContent>
+                    </Popover>
                   </TableCell>
                 </TableRow>
               ))}
