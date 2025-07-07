@@ -83,13 +83,13 @@ export const SurveyForm: React.FC<SurveyFormProps> = ({
         <div className="container mx-auto py-8">
             <div className="max-w-3xl mx-auto">
                 <h1 className="text-3xl font-bold mb-8">
-                    {mode === "edit" ? "Edit Test" : "Create New Test"}
+                    {mode === "edit" ? "Edit Survey" : "Create New Survey"}
                 </h1>
 
                 <div className="space-y-4 mb-8">
                     <div>
                         <Input
-                            placeholder="Test Title"
+                            placeholder="Survey Title"
                             value={survey.title}
                             onChange={(e) => {
                                 setSurvey({ ...survey, title: e.target.value });
@@ -104,7 +104,7 @@ export const SurveyForm: React.FC<SurveyFormProps> = ({
 
                 <div className="space-y-4 mb-8">
                     <Textarea
-                        placeholder="Test Description"
+                        placeholder="Description"
                         value={survey.description}
                         onChange={(e) =>
                             setSurvey({ ...survey, description: e.target.value })
@@ -150,7 +150,7 @@ export const SurveyForm: React.FC<SurveyFormProps> = ({
                         Preview Changes
                     </Button>
                     <Button onClick={onSave}>
-                        {mode === "edit" ? "Save Changes" : "Save Test"}
+                        Save
                     </Button>
                 </div>
                 {errors?.questions && (

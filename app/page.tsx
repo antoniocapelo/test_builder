@@ -52,10 +52,10 @@ export default function Home() {
   return (
     <div className="container mx-auto py-8">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Frontend Engineer Test Builder</h1>
+        <h1 className="text-3xl font-bold">My Surveys</h1>
         <Button onClick={() => router.push("/create")}>
           <PlusCircle className="mr-2 h-4 w-4" />
-          Create Test
+          Create Survey
         </Button>
       </div>
       <div className="flex gap-4 items-center justify-between w-full mb-6">
