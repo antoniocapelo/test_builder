@@ -22,6 +22,7 @@ This file is intended to collect some thoughts and ideas that I have during the 
 - [x] Switch between edit/preview modes
 - [x] search functionality
 - [ ] Consistent back navigation
+- [x] Reorder questions
 
 ## Possible improvements to base logic
 
