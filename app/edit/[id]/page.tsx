@@ -1,24 +1,27 @@
 "use client";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
-import { QuestionBuilder } from "@/components/survey/question-builder";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { getSurveyById, saveSurvey } from "@/lib/survey";
-import { Question, Survey } from "@/types/survey";
+import { useFormValidation } from "@/hooks/use-form-validation";
+import { getSurveyById, saveDraft, saveSurvey } from "@/lib/survey";
+import { Question, Survey, surveySchema } from "@/types/survey";
+import { SurveyForm } from "@/components/survey/survey-form";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Dispatch, useEffect, useState } from "react";
+import Loading from "@/components/ui/loading";
+import { toast } from "sonner";
 
 export default function EditSurvey() {
   const router = useRouter();
   const params = useParams();
-  const [survey, setSurvey] = useState<Survey | undefined>();
+  const [survey, setSurvey] = useState<Survey>();
+  const [isLoading, setIsLoading] = useState(true);
+  const { errors, validate, resetError } = useFormValidation(surveySchema);
 
   useEffect(() => {
     if (params.id) {
       const loadedSurvey = getSurveyById(params.id as string);
+      setIsLoading(false);
       if (loadedSurvey) {
         setSurvey(loadedSurvey);
       } else {
@@ -27,87 +30,37 @@ export default function EditSurvey() {
     }
   }, [params.id, router]);
 
-  const addQuestion = () => {
-    if (!survey) return;
-    const newQuestion: Question = {
-      id: crypto.randomUUID(),
-      type: "text",
-      text: "",
-      options: [],
-      required: false,
-    };
-    setSurvey({
-      ...survey,
-      questions: [...survey.questions, newQuestion],
-    });
-  };
-
-  const updateQuestion = (updatedQuestion: Question) => {
-    if (!survey) return;
-    setSurvey({
-      ...survey,
-      questions: survey.questions.map((q) =>
-        q.id === updatedQuestion.id ? updatedQuestion : q
-      ),
-    });
-  };
-
-  const deleteQuestion = (questionId: string) => {
-    if (!survey) return;
-    setSurvey({
-      ...survey,
-      questions: survey.questions.filter((q) => q.id !== questionId),
-    });
-  };
-
   const handleSave = () => {
     if (!survey) return;
+    const isValid = validate(survey);
+    if (!isValid) {
+      return;
+    }
+    survey.modifiedAt = new Date().toISOString();
     saveSurvey(survey);
+    toast.success(' Survey saved successfully!');
     router.push("/");
   };
 
+  if (isLoading) {
+    return <Loading fullHeight text="Loading survey..." />;
+  }
+
   if (!survey) {
-    return <div>Loading...</div>;
+    return null
   }
 
   return (
-    <div className="container mx-auto py-8">
-      <div className="max-w-3xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8">Edit Test</h1>
-
-        <div className="space-y-4 mb-8">
-          <Input
-            placeholder="Test Title"
-            value={survey.title}
-            onChange={(e) => setSurvey({ ...survey, title: e.target.value })}
-          />
-          <Textarea
-            placeholder="Test Description"
-            value={survey.description}
-            onChange={(e) =>
-              setSurvey({ ...survey, description: e.target.value })
-            }
-          />
-        </div>
-
-        <div className="space-y-4 mb-8">
-          {survey.questions.map((question) => (
-            <QuestionBuilder
-              key={question.id}
-              question={question}
-              onUpdate={updateQuestion}
-              onDelete={deleteQuestion}
-            />
-          ))}
-        </div>
-
-        <div className="flex gap-4">
-          <Button onClick={addQuestion} variant="outline">
-            Add Question
-          </Button>
-          <Button onClick={handleSave}>Save Changes</Button>
-        </div>
-      </div>
-    </div>
+    <SurveyForm
+      survey={survey}
+      // Casting because at this point we know survey is defined
+      setSurvey={setSurvey as Dispatch<React.SetStateAction<Survey>>}
+      errors={errors}
+      validate={validate}
+      resetError={resetError}
+      isLoading={false}
+      onSave={handleSave}
+      mode="edit"
+    />
   );
 }

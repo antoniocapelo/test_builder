@@ -1,6 +1,7 @@
 import { Survey, SurveyResponse } from '@/types/survey';
 
 const STORAGE_KEY = 'surveys';
+const STORAGE_KEY_DRAFT = 'survey_draft';
 const RESPONSES_STORAGE_KEY = 'survey_responses';
 
 export function getSurveys(): Survey[] {
@@ -13,14 +14,30 @@ export function saveSurvey(survey: Survey): void {
   if (typeof window === 'undefined') return;
   const surveys = getSurveys();
   const existingIndex = surveys.findIndex((s) => s.id === survey.id);
-  
+
   if (existingIndex >= 0) {
     surveys[existingIndex] = survey;
   } else {
     surveys.push(survey);
   }
-  
+
   localStorage.setItem(STORAGE_KEY, JSON.stringify(surveys));
+}
+
+export function saveDraft(survey: Survey): void {
+  if (typeof window === 'undefined') return;
+
+  localStorage.setItem(STORAGE_KEY_DRAFT, JSON.stringify(survey));
+}
+
+export function loadDraft(): Survey | undefined {
+  if (typeof window === 'undefined') return;
+  const draft = localStorage.getItem(STORAGE_KEY_DRAFT);
+
+  if (draft) {
+    localStorage.removeItem(STORAGE_KEY_DRAFT); // Clear draft after loading
+    return JSON.parse(draft);
+  }
 }
 
 export function deleteSurvey(id: string): void {

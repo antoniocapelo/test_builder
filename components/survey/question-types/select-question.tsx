@@ -18,7 +18,9 @@ interface SelectQuestionProps {
 export function SelectQuestion({ question, value, onChange }: SelectQuestionProps) {
   return (
     <Select value={value as string} onValueChange={onChange}>
-      <SelectTrigger>
+      <SelectTrigger
+        data-question-id={question.id}
+      >
         <SelectValue placeholder="Select an option" />
       </SelectTrigger>
       <SelectContent>

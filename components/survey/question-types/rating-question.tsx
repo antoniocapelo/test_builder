@@ -26,6 +26,7 @@ export function RatingQuestion({ question, value = 0, onChange }: RatingQuestion
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             )}
             onClick={() => onChange(starNumber)}
+            data-question-id={question.id}
           >
             <Star
               className={cn(

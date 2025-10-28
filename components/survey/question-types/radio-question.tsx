@@ -15,7 +15,11 @@ export function RadioQuestion({ question, value, onChange }: RadioQuestionProps)
     <RadioGroup value={value} onValueChange={onChange} required={question.required}>
       {question.options?.map((option) => (
         <div key={option.id} className="flex items-center space-x-2">
-          <RadioGroupItem value={option.id} id={option.id} />
+          <RadioGroupItem
+            value={option.id}
+            id={option.id}
+            data-question-id={question.id}
+          />
           <Label htmlFor={option.id}>{option.text}</Label>
         </div>
       ))}

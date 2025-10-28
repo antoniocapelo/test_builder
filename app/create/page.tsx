@@ -1,13 +1,13 @@
 "use client";
 
-import { QuestionBuilder } from "@/components/survey/question-builder";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { saveSurvey } from "@/lib/survey";
-import { Question, Survey } from "@/types/survey";
+import { SurveyForm } from "@/components/survey/survey-form";
+import { useFormValidation } from "@/hooks/use-form-validation";
+import { loadDraft, saveSurvey } from "@/lib/survey";
+import { Survey, surveySchema } from "@/types/survey";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function CreateSurvey() {
   const router = useRouter();
@@ -18,80 +18,46 @@ export default function CreateSurvey() {
     questions: [],
     createdAt: new Date().toISOString(),
   });
+  const { errors, validate, resetError } = useFormValidation(surveySchema);
 
-  const addQuestion = () => {
-    const newQuestion: Question = {
-      id: crypto.randomUUID(),
-      type: "text",
-      text: "",
-      options: [],
-      required: false,
-    };
-    setSurvey({
-      ...survey,
-      questions: [...survey.questions, newQuestion],
-    });
-  };
+  useEffect(() => {
+    const savedDraft = loadDraft();
+    if (savedDraft) {
+      setSurvey(savedDraft);
+    }
+  }, []);
 
-  const updateQuestion = (updatedQuestion: Question) => {
-    setSurvey({
-      ...survey,
-      questions: survey.questions.map((q) =>
-        q.id === updatedQuestion.id ? updatedQuestion : q
-      ),
-    });
-  };
 
-  const deleteQuestion = (questionId: string) => {
-    setSurvey({
-      ...survey,
-      questions: survey.questions.filter((q) => q.id !== questionId),
-    });
-  };
+
 
   const handleSave = () => {
+    const isValid = validate(survey);
+    if (!isValid) {
+      return;
+    }
+    survey.modifiedAt = new Date().toISOString();
     saveSurvey(survey);
+    toast.success(
+      <span>
+        Test saved successfully! You can view it{" "}
+        <Link className="text-primary underline" href={`/survey/${survey.id}`}>
+          here
+        </Link>
+      </span>
+    );
     router.push("/");
   };
 
   return (
-    <div className="container mx-auto py-8">
-      <div className="max-w-3xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8">Create New Test</h1>
-
-        <div className="space-y-4 mb-8">
-          <Input
-            placeholder="Test Title"
-            value={survey.title}
-            onChange={(e) => setSurvey({ ...survey, title: e.target.value })}
-          />
-          <Textarea
-            placeholder="Test Description"
-            value={survey.description}
-            onChange={(e) =>
-              setSurvey({ ...survey, description: e.target.value })
-            }
-          />
-        </div>
-
-        <div className="space-y-4 mb-8">
-          {survey.questions.map((question) => (
-            <QuestionBuilder
-              key={question.id}
-              question={question}
-              onUpdate={updateQuestion}
-              onDelete={deleteQuestion}
-            />
-          ))}
-        </div>
-
-        <div className="flex gap-4">
-          <Button onClick={addQuestion} variant="outline">
-            Add Question
-          </Button>
-          <Button onClick={handleSave}>Save Test</Button>
-        </div>
-      </div>
-    </div>
+    <SurveyForm
+      survey={survey}
+      setSurvey={setSurvey}
+      errors={errors}
+      resetError={resetError}
+      isLoading={false}
+      validate={validate}
+      onSave={handleSave}
+      mode="create"
+    />
   );
 }
